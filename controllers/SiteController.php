@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -98,6 +99,13 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function actionSignout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+
     /**
      * Displays contact page.
      *
@@ -105,6 +113,7 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        throw new ForbiddenHttpException("This page has been disabled due to security reasons. Please email ".Yii::$app->params['adminEmail']." if you have any issues.");
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');

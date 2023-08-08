@@ -1,7 +1,9 @@
 <?php
 
+
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'admin@shadowpoint.gg',
     'senderEmail' => 'taskboard@shadowpoint.gg',
     'senderName' => 'SPGG TaskBoard',
+
 ];

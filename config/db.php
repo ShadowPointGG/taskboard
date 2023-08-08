@@ -1,10 +1,12 @@
 <?php
 
+require_once("vars.php");
+
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=198.251.74.249;dbname=spgg_taskboard',
-    'username' => 'spgg',
-    'password' => 'Applechris998!',
+    'dsn' => 'mysql:host='.DB_HOST.';dbname='.DB_NAME,
+    'username' => DB_USER,
+    'password' => DB_PASS,
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

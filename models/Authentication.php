@@ -3,11 +3,34 @@
 namespace app\models;
 
 use yii\base\Model;
+use Yii;
 
 Class Authentication extends Model{
 
-    public static function tableName(){
-        return '{{%auth_assignment}}';
+    /**
+     * Various Admin Checks
+     */
+    public static function isGlobalAdmin(): bool
+    {
+        return Yii::$app->user->can("globalAdmin");
+    }
+
+    public static function isSiteAdmin(): bool
+    {
+        return Yii::$app->user->can("siteAdmin");
+    }
+
+    public static function isAdmin(): bool
+    {
+        return Yii::$app->user->can("administrator") || Yii::$app->user->can("globalAdmin") || Yii::$app->user->can("siteAdmin");
+    }
+
+    /**
+     * User should only be able to edit their own profiles, or an Admin can edit them
+     */
+    public static function canEditUser($id): bool
+    {
+        return Yii::$app->user->id == $id || Yii::$app->user->can("userUpdate");
     }
 
 }

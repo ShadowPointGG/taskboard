@@ -1,0 +1,11 @@
+<?php
+
+/**
+* WHEN INSTALLING THIS APPLICATION, PLEASE REMOVE THE .EXAMPLE
+* FROM THIS FILE AND ENTER YOUR OWN DETAILS
+*/
+
+const DB_HOST = "127.0.0.1";
+const DB_NAME = "database name";
+const DB_USER = "root";
+const DB_PASS = "password";

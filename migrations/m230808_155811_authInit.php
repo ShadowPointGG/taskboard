@@ -35,6 +35,7 @@ class m230808_155811_authInit extends Migration
 
         //userManager - userAdmin
         $userAdmin = $auth->createRole("userAdmin");
+        $userAdmin->description = "User Administration";
         $auth->add($userAdmin);
         $auth->addChild($userAdmin, $userCreate);
         $auth->addChild($userAdmin, $userEdit);
@@ -61,6 +62,7 @@ class m230808_155811_authInit extends Migration
 
         //taskManager - taskAdmin
         $taskAdmin = $auth->createRole("taskAdmin");
+        $taskAdmin->description = "Task Administrator";
         $auth->add($taskAdmin);
         $auth->addChild($taskAdmin, $taskCreate);
         $auth->addChild($taskAdmin, $taskUpdate);
@@ -70,15 +72,33 @@ class m230808_155811_authInit extends Migration
          * System Management Roles
          */
 
+        //siteAdmin - manage Site Configs
+        $siteConfigs = $auth->createPermission("siteConfig");
+        $siteConfigs->description = "Can edit Site Configurations";
+        $auth->add($siteConfigs);
+
+        $siteAdmin = $auth->createRole("siteAdmin");
+        $siteAdmin->description = "Site Administrator";
+        $auth->add($siteAdmin);
+        $auth->addChild($siteAdmin, $siteConfigs);
+
         //globalAdmin
         $globalAdmin = $auth->createRole("globalAdmin");
+        $globalAdmin->description = "Global Administrator";
         $auth->add($globalAdmin);
         $auth->addChild($globalAdmin, $taskAdmin);
         $auth->addChild($globalAdmin, $userAdmin);
+        $auth->addChild($globalAdmin, $siteAdmin);
 
+        //administrator
+        $administrator = $auth->createRole("admin");
+        $administrator->description = "General Administrator";
+        $auth->add($administrator);
+        $auth->addChild($administrator, $taskAdmin);
+        $auth->addChild($administrator, $userAdmin);
 
         /**
-         * Add global Admin roles to User ID 1
+         * Add Global Admin roles to User ID 1
          */
 
         $auth->assign($globalAdmin, 1);
