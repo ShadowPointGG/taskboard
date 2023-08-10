@@ -21,13 +21,18 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $password
+ * @property string $password_confirm
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+
+    public $newPassword;
+    public $repeatPassword;
+    public $oldPassword;
 
 
     /**
@@ -56,6 +61,16 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['newPassword', 'compare', 'compareAttribute'=>'repeatPassword'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'newPassword' => 'New Password',
+            'repeatPassword' => 'Confirm the new Password',
+            'oldPassword' => 'Enter your old Password'
         ];
     }
 
@@ -87,6 +102,17 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Finds user by email
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
      * Finds user by password reset token
      *
      * @param string $token password reset token
@@ -112,8 +138,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByVerificationToken($token) {
         return static::findOne([
-            'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
+            'verification_token' => $token
         ]);
     }
 
@@ -177,6 +202,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function setPassword($password)
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function getPassword()
+    {
+        return '';
     }
 
     /**

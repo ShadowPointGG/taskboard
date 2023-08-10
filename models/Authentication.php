@@ -33,4 +33,9 @@ Class Authentication extends Model{
         return Yii::$app->user->id == $id || Yii::$app->user->can("userUpdate");
     }
 
+    public static function canCreateUser(): bool
+    {
+        return Yii::$app->user->can("userCreate");
+    }
+
 }

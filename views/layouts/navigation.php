@@ -12,6 +12,7 @@ $items = [
 
     ['label' => 'Admin Area', 'visible' => authy::isAdmin(), 'items'=>[
         ['label' => 'Dashboard', 'url' => ['/admin/index', 'visible'=>authy::isAdmin()]],
+        ['label' => 'Invite Users', 'url' => ['/site/invite','visible' => authy::canCreateUser()]],
     ]],
 
 

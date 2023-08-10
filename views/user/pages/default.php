@@ -31,7 +31,7 @@ $taskChart = ChartJs::widget([
 
 ?>
 
-<h1>Welcome <?=strtoupper($user->username)?>,</h1>
+<h1>Welcome <?=$user->first_name?>,</h1>
 <br>
 <h3>Here is your dashboard.</h3>
 <br><br>

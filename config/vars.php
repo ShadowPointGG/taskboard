@@ -11,3 +11,4 @@ const DB_USER = "spgg";
 const DB_PASS = "Applechris998!";
 const APPLICATION_NAME = "SPGG TaskBoard";
 const APP_TIMEZONE = "EST";
+const COMPANY_NAME = "ShadowPoint.GG";
