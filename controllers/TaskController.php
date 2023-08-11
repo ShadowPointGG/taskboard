@@ -24,7 +24,7 @@ Class TaskController extends Controller{
         ];
     }
 
-    public function actionIndex($id){
-        
+    public function actionIndex(){
+        return $this->render('/task/index');
     }
 }

@@ -38,4 +38,8 @@ Class Authentication extends Model{
         return Yii::$app->user->can("userCreate");
     }
 
+    public static function isTaskAdmin(): bool
+    {
+        return Yii::$app->user->can('taskAdmin');
+    }
 }

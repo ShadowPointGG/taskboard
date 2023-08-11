@@ -10,11 +10,15 @@ $items = [
         ['label' => 'About', 'url' => ['/site/about']],
     ]],
 
-    ['label' => 'Admin Area', 'visible' => authy::isAdmin(), 'items'=>[
-        ['label' => 'Dashboard', 'url' => ['/admin/index', 'visible'=>authy::isAdmin()]],
-        ['label' => 'Invite Users', 'url' => ['/site/invite','visible' => authy::canCreateUser()]],
+    ['label' => 'Tasks', 'visible'=>!Yii::$app->user->isGuest, 'items'=>[
+        ['label' => 'Dashboard','url'=>['/task/index']],
     ]],
 
+    ['label' => 'Admin Area', 'visible' => authy::isAdmin(), 'items'=>[
+        ['label' => 'Dashboard', 'url' => ['/admin/index', 'visible'=>authy::isAdmin()]],
+        ['label' => 'Task Dashboard','url'=>['/admin/task-dashboard','visible'=>authy::isTaskAdmin()]],
+        ['label' => 'Invite Users', 'url' => ['/site/invite','visible' => authy::canCreateUser()]],
+    ]],
 
     ['label' => 'User', 'visible' => !Yii::$app->user->isGuest, 'items'=>[
         ['label' => 'Profile', 'url' => ['/user/index','id'=>Yii::$app->user->id]],
