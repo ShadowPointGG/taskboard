@@ -240,4 +240,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public static function getVerificationToken($id){
+        $user = self::find()->where(['id'=>$id])->one();
+        return $user->verification_token;
+    }
 }

@@ -14,4 +14,4 @@ Your Account has all been set up, you just need to activate your account followi
 
 Your temporary password is: <?=$password?>
 <!--INSERT VERIFICATION LINK HERE-->
-<?= Url::to('/site/verify-email',['token'=>$user->verification_token]) ?>
+<?= Url::to(['/site/verify-email','token'=>$user->verification_token], 'http') ?>

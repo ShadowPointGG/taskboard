@@ -15,4 +15,4 @@ use yii\helpers\Url;
 <p>Your temporary password is: <?=$password?></p>
 
 <!--INSERT VERIFICATION LINK HERE-->
-<?= Url::to('/site/verify-email',['token'=>$user->verification_token]) ?>
+<?= Url::to(['/site/verify-email', 'token' => $user->verification_token],'http') ?>
