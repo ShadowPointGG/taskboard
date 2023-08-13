@@ -1,10 +1,9 @@
 <?php
 
-namespace app\models;
+namespace app\models\usermodels;
 
 use Yii;
 use yii\base\Model;
-use app\models\User;
 
 /**
  * Signup form
@@ -25,7 +24,7 @@ class InviteForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\app\models\usermodels\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['first_name','trim'],
@@ -36,7 +35,7 @@ class InviteForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\app\models\usermodels\User', 'message' => 'This email address has already been taken.'],
         ];
     }
 

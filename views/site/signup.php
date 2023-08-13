@@ -2,10 +2,10 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-/** @var \app\models\InviteForm $model */
+/** @var \app\models\usermodels\InviteForm $model */
 
-use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
+use yii\bootstrap5\Html;
 
 $this->title = 'Invite a User';
 $this->params['breadcrumbs'][] = $this->title;

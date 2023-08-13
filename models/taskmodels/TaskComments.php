@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\taskmodels;
 
 use yii\db\ActiveRecord;
 

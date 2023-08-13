@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use app\models\Authentication;
-use yii\web\Controller;
 use app\models\Authentication as authy;
+use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 
 Class AdminController extends Controller{
@@ -16,6 +16,14 @@ Class AdminController extends Controller{
         }
 
         return $this->render('index');
+    }
+
+    public function actionTaskDashboard(){
+
+        if(!authy::isTaskAdmin()){
+            throw new ForbiddenHttpException("You are not authorised to access this page! Please let an admin know if this is a mistake");
+        }
+        return $this->render('task-dashboard');
     }
 
 }

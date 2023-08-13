@@ -38,8 +38,18 @@ Class Authentication extends Model{
         return Yii::$app->user->can("userCreate");
     }
 
+    /**
+     * Task Auths
+     * @return bool
+     */
+
     public static function isTaskAdmin(): bool
     {
         return Yii::$app->user->can('taskAdmin');
+    }
+
+    public static function canCreateTasks(): bool
+    {
+        return Yii::$app->user->can('taskCreate');
     }
 }

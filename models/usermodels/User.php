@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\usermodels;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -244,5 +244,11 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getVerificationToken($id){
         $user = self::find()->where(['id'=>$id])->one();
         return $user->verification_token;
+    }
+
+    public static function getUsername($id): string
+    {
+        $user = self::find()->where(['id'=>$id])->one();
+        return $user->username;
     }
 }

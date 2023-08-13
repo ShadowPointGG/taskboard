@@ -15,9 +15,9 @@ $items = [
     ]],
 
     ['label' => 'Admin Area', 'visible' => authy::isAdmin(), 'items'=>[
-        ['label' => 'Dashboard', 'url' => ['/admin/index', 'visible'=>authy::isAdmin()]],
-        ['label' => 'Task Dashboard','url'=>['/admin/task-dashboard','visible'=>authy::isTaskAdmin()]],
-        ['label' => 'Invite Users', 'url' => ['/site/invite','visible' => authy::canCreateUser()]],
+        ['label' => 'Dashboard', 'url' => ['/admin/index'], 'visible'=>authy::isAdmin()],
+        ['label' => 'Task Dashboard','url'=>['/admin/task-dashboard'],'visible'=>authy::isTaskAdmin()],
+        ['label' => 'Invite Users', 'url' => ['/site/invite'],'visible' => authy::canCreateUser()],
     ]],
 
     ['label' => 'User', 'visible' => !Yii::$app->user->isGuest, 'items'=>[

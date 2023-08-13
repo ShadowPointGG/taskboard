@@ -2,21 +2,20 @@
 
 namespace app\controllers;
 
-use app\models\InviteForm;
-use app\models\PasswordResetRequestForm;
-use app\models\ResendVerificationEmailForm;
-use app\models\ResetPasswordForm;
-use app\models\VerifyEmailForm;
+use app\models\usermodels\InviteForm;
+use app\models\usermodels\LoginForm;
+use app\models\usermodels\PasswordResetRequestForm;
+use app\models\usermodels\ResendVerificationEmailForm;
+use app\models\usermodels\ResetPasswordForm;
+use app\models\usermodels\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 
 class SiteController extends Controller
 {

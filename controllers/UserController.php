@@ -2,9 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\usermodels\User;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\User;
 
 Class UserController extends Controller{
 

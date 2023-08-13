@@ -90,3 +90,10 @@ a.desc:after {
 div>info-box{
     border: 1px solid #1a1a1a;
 }
+
+#task-description{
+    display: block;
+    width: 100%;
+    border: black inset 2px;
+    padding: 10px;
+}

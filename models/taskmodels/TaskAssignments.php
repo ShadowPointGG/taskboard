@@ -1,20 +1,20 @@
 <?php
 
-namespace app\models;
+namespace app\models\taskmodels;
 
 use yii\db\ActiveRecord;
 
-Class Tasks extends ActiveRecord {
+Class TaskAssignments extends ActiveRecord {
 
     public static function tableName()
     {
-        return "{{tasks}}";
+        return "{{task_assignment}}";
     }
 
     public function attributeLabels()
     {
         return [
-            'title' => 'Task Name: ',
+            'user_id' => 'User to assign to!'
         ];
     }
 

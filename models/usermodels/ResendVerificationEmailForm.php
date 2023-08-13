@@ -1,9 +1,8 @@
 <?php
 
-namespace app\models;
+namespace app\models\usermodels;
 
 use Yii;
-use app\models\User;
 use yii\base\Model;
 
 class ResendVerificationEmailForm extends Model
