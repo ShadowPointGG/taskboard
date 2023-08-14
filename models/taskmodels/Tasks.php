@@ -4,6 +4,7 @@ namespace app\models\taskmodels;
 
 use app\models\usermodels\User;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
 Class Tasks extends ActiveRecord {
@@ -40,4 +41,6 @@ Class Tasks extends ActiveRecord {
             ->setSubject('Task Assigned on '.COMPANY_NAME)
             ->send();
     }
+
+
 }
