@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\usermodels\User;
 use yii\base\Model;
 use Yii;
 
@@ -38,6 +39,23 @@ Class Authentication extends Model{
         return Yii::$app->user->can("userCreate");
     }
 
+    public static function canDeleteUser(): bool
+    {
+        return Yii::$app->user->can("userDelete");
+    }
+
+    public static function canUpdateUsers(): bool
+    {
+        return Yii::$app->user->can('userUpdate');
+    }
+
+
+    public static function isUserAdmin(): bool
+    {
+        return Yii::$app->user->can("userAdmin");
+
+    }
+
     /**
      * Task Auths
      * @return bool
@@ -52,4 +70,22 @@ Class Authentication extends Model{
     {
         return Yii::$app->user->can('taskCreate');
     }
+
+    public static function canDeleteTasks(): bool
+    {
+        return Yii::$app->user->can('taskDelete');
+    }
+    public static function canUpdateTasks(): bool
+    {
+        return Yii::$app->user->can('taskUpdate');
+    }
+
+
+    // user permission check
+
+    public static function checkPerm($id,$perm): bool
+    {
+        return Yii::$app->authManager->checkAccess($id,$perm);
+    }
+
 }

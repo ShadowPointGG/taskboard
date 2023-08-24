@@ -94,6 +94,6 @@ div>info-box{
 #task-description{
     display: block;
     width: 100%;
-    border: black inset 2px;
+    border: black inset 15px;
     padding: 10px;
 }

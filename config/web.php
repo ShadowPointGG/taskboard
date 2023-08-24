@@ -7,6 +7,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+//    'homeUrl' => ['/task/dashboard'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -50,14 +51,29 @@ $config = [
             // uncomment if you want to cache RBAC items hierarchy
             // 'cache' => 'cache',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                //user rules
+                'user/tasks/<id:\d+>' => 'task/index',
+                'user/<id:\d+>' => 'user/index',
+                'user/assign/<id:\d+>' => 'user/assign-roles',
+
+                //task rules
+                'task/<id:\d+>' => 'task/view',
+                'task/update/<taskId:\d+>' => 'task/update',
+                'task/overview/<id:\d+>'=> 'task/overview',
+
+                //admin rules
+                'admin' => 'admin/index',
+                'admin/tasks' => 'admin/task-dashboard',
+                'admin/invite' => 'site/invite',
+                'admin/users' => 'admin/user-dashboard'
             ],
         ],
-        */
+
     ],
     'params' => $params,
     'modules' => [

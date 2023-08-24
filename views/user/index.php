@@ -1,32 +1,39 @@
 <?php
 
+use app\models\PermissionManagement;
 use kartik\tabs\TabsX;
+use app\models\Authentication as authy;
 
 /**
  * Define the Blocks for the Tabs
  */
 
 $this->beginBlock('default');
-echo $this->render('/user/pages/default',['user' => $user]);
+echo $this->render('/user/pages/default',
+    ['user' => $user,
+        'tasks'=>$tasks,
+        'searchModel'=>$searchModel,
+        'dataProvider'=>$dataProvider
+    ]);
 $this->endBlock();
 
 $this->beginBlock('edit');
-include("pages/edit.php");
+echo $this->render("/user/pages/edit",
+    ['model'=>$user,
+        'accessRights' => $accessRights,
+        'permissions' => PermissionManagement::getRolesAndChildren()]);
 $this->endBlock();
 
 $this->beginBlock('security');
-include("pages/security.php");
-$this->endBlock();
-
-$this->beginBlock('tasks');
-include("pages/tasks.php");
+echo $this->render("/user/pages/security",
+    ['model'=>$user]);
 $this->endBlock();
 
 
 
 $items = [
     [
-        'label'=>'<i class="fas fa-home"></i> Dashboard',
+        'label'=>'<i class="fas fa-list-alt"></i> My Tasks',
         'content'=>$this->blocks['default'],
         'active'=>true
     ],
@@ -35,13 +42,11 @@ $items = [
         'content'=>$this->blocks['edit'],
     ],
     [
-        'label'=>'<i class="fas fa-list-alt"></i> My Tasks',
-        'content' => $this->blocks['tasks'],
-    ],
-    [
         'label'=>'<i class="fas fa-key"></i> Login and Security',
-        'content' => $this->blocks['security']
+        'content' => $this->blocks['security'],
+        'visible' => Yii::$app->user->id == $user->id
     ],
+
 ];
 
 echo TabsX::widget([

@@ -62,6 +62,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             ['newPassword', 'compare', 'compareAttribute'=>'repeatPassword'],
+            ['email', 'unique', 'targetClass' => '\app\models\usermodels\User', 'message' => 'This email address has already been taken.'],
+
         ];
     }
 
@@ -251,4 +253,29 @@ class User extends ActiveRecord implements IdentityInterface
         $user = self::find()->where(['id'=>$id])->one();
         return $user->username;
     }
+
+    public static function sendUpdateEmail($user)
+    {
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'user-update_html', 'text' => 'user-update_txt'],
+                ['user' => $user]
+            )
+            ->setFrom(Yii::$app->params['senderEmail'])
+            ->setTo($user->email)
+            ->setSubject('Account Update for: ' . APPLICATION_NAME)
+            ->send();
+    }
+
+    public static function updateValidatePassword($id,$password)
+    {
+        $user = User::findIdentity($id);
+
+        if (!$user || !$user->validatePassword($password)) {
+            Yii::$app->session->setFlash('error', 'Incorrect username or password.');
+            return false;
+        }else{return true;}
+    }
+
 }

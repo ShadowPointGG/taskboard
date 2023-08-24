@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\models\taskmodels\TaskAssignments;
+use app\models\taskmodels\TaskComments;
 use app\models\taskmodels\Tasks;
+use app\models\taskmodels\TaskSearch;
 use app\models\usermodels\User;
 use DateTime;
 use Yii;
@@ -21,7 +23,13 @@ Class TaskController extends Controller{
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'update', 'delete', 'create'], // add all actions to take guest to login page
+                        'actions' => ['index',
+                            'view',
+                            'update',
+                            'delete',
+                            'create',
+                            'change-status',
+                            'overview'], // add all actions to take guest to login page
                         'allow' => true,
                         'roles' => ['@'],
 
@@ -31,11 +39,20 @@ Class TaskController extends Controller{
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex($id){
 
-        $assignments = TaskAssignments::find()->where(['user_id' => Yii::$app->user->id])->all();
+        $user = User::find()->where(['id'=>$id])->one();
+        $userAssignments = TaskAssignments::find()->where(['user_id'=>$id])->all();
+        $taskIds = [];
+        foreach($userAssignments as $assignment){
+            $taskIds[] = $assignment->task_id;
+        }
+        $tasks = Tasks::findAll($taskIds);
 
-        return $this->render('/task/index',['assignments'=>$assignments]);
+        $searchModel = new TaskSearch();
+        $dataProvider = $searchModel->searchByUser(Yii::$app->request->queryParams, $tasks);
+
+        return $this->render('/task/index',['user'=>$user,'searchModel'=>$searchModel,'dataProvider'=>$dataProvider,'tasks'=>$tasks]);
     }
 
     public function actionCreate(){
@@ -81,7 +98,34 @@ Class TaskController extends Controller{
         $taskModel = Tasks::find()->where(['id'=>$id])->one();
         $assignees = TaskAssignments::find()->where(['task_id'=>$id])->all();
 
-        return $this->render('/task/view',['task'=>$taskModel,'assignedTo'=>$assignees]);
+        $comments = TaskComments::find()->where(['task_id'=>$id])->orderBy(['id'=>SORT_DESC])->all();
+        $newComment = new TaskComments();
+
+        if(isset($_POST['TaskComments'])){
+            $newComment->task_id = $id;
+            $newComment->comment = $_POST['TaskComments']['comment'];
+            $newComment->created_by = Yii::$app->user->id;
+            $newComment->created_on = time();
+            $newComment->save();
+            return $this->redirect(['/task/view','id'=>$id]);
+        }
+
+        return $this->render('/task/view',[
+            'task'=>$taskModel,
+            'assignedTo'=>$assignees,
+            'comments'=>$comments,
+            'commentModel' => $newComment]);
+    }
+    public function actionDelete($id){
+        $taskModel = Tasks::find()->where(['id'=>$id])->one();
+        $taskModel->delete();
+
+        $taskAssignments = Tasks::find()->where(['task_id' => $id])->all();
+        foreach($taskAssignments as $assignment){
+            $assignment->delete();
+        }
+
+        return $this->redirect(['/admin/task-dashboard']);
     }
 
     public function actionUpdate($taskId){
@@ -132,5 +176,48 @@ Class TaskController extends Controller{
             'users'=>$users,
             'assignment'=>$assignment,
             'assignments' => $assignments]);
+    }
+
+    public function actionChangeStatus($task, $status){
+        $taskModel = Tasks::find()->where(['id'=>$task])->one();
+
+        if($taskModel->created_by != Yii::$app->user->id || !authy::isTaskAdmin()){
+            throw new ForbiddenHttpException("You are not authorised to edit this task. Please contact an admin if you believe this is in error,");
+        }
+
+        $taskModel->status = $status;
+        $taskModel->save();
+
+        return $this->redirect(['/task/view','id'=>$task]);
+    }
+
+    public function actionOverview($id){
+        $user = User::find()->where(['id'=>$id])->one();
+        $userAssignments = TaskAssignments::find()->where(['user_id'=>$id])->all();
+        $taskIds = [];
+        foreach($userAssignments as $assignment){
+            $taskIds[] = $assignment->task_id;
+        }
+        $tasks = Tasks::findAll($taskIds);
+
+        return $this->render('/task/overview',['tasks'=>$tasks,'user'=>$user]);
+    }
+
+    public static function updateAllStatus(): void
+    {
+        $tasks = Tasks::find()->all();
+        foreach($tasks as $task){
+            switch($task->task_due):
+                case $task->task_due>time():
+                    $task->status = Tasks::STATUS_OVERDUE;
+                    break;
+                case ($task->task_due - 259200) < time() && time() < $task->task_due:
+                    $task->status == Tasks::STATUS_DUE;
+                    break;
+                case ($task->task_due - 259200) < time():
+                    $task->status == Tasks::STATUS_ONGOING;
+                    break;
+            endswitch;
+        }
     }
 }

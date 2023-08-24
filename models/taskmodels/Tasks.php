@@ -43,4 +43,25 @@ Class Tasks extends ActiveRecord {
     }
 
 
+    public static function updateAllStatus(): void
+    {
+        $tasks = Tasks::find()->all();
+        foreach($tasks as $task){
+            switch($task->task_due):
+                case ($task->task_due - 259200) > time():
+                    $task->status == Tasks::STATUS_ONGOING;
+                    $task->save();
+                    break;
+                case ($task->task_due - 259200) < time() && time() < $task->task_due:
+                    $task->status == Tasks::STATUS_DUE;
+                    $task->save();
+                    break;
+                case $task->task_due < time():
+                    $task->status = Tasks::STATUS_OVERDUE;
+                    $task->save();
+                    break;
+            endswitch;
+        }
+    }
+
 }

@@ -1,6 +1,12 @@
 <?php
-use app\models\usermodels\User;
 
+use app\models\taskmodels\Tasks;
+use app\models\usermodels\User;
+use kartik\bs5dropdown\ButtonDropdown;
+use app\models\Authentication as authy;
+use yii\bootstrap5\Modal;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 $dateDiff = ceil((round($task->task_due-time()))/86400);
 
@@ -26,6 +32,34 @@ if(!empty($assignedTo)) {
 }else $currentAssign = "This task is not currently assigned to anyone.";
 echo "<sub><i>".$currentAssign."</i></sub>";
 ?>
+<hr>
+<?php
+switch ($task->status){
+    case Tasks::STATUS_ONGOING:
+        echo "Current Status: Ongoing";
+        break;
+    case Tasks::STATUS_DUE:
+        echo "Current Status: DUE";
+        break;
+    case Tasks::STATUS_OVERDUE:
+        echo "Current Status: OVERDUE";
+        break;
+    case Tasks::STATUS_COMPLETE:
+        echo "Current Status: Complete";
+        break;
+}
+?>
+<?php if(authy::isTaskAdmin()) echo "   " . ButtonDropdown::widget([
+    'label' => 'Change Status',
+    'dropdown' => [
+        'items' => [
+            ['label' => 'Ongoing', 'url' => ['/task/change-status','task'=>$task->id,'status'=>Tasks::STATUS_ONGOING]],
+            ['label' => 'Complete', 'url' => ['/task/change-status','task'=>$task->id,'status'=>Tasks::STATUS_COMPLETE]],
+
+        ],
+    ],
+    'buttonOptions' => ['class' => 'btn-outline-secondary']
+]);?>
 
 <br><hr>
 
@@ -35,3 +69,42 @@ echo "<sub><i>".$currentAssign."</i></sub>";
 <i id="task-description"><?=$task->description?></i>
 
 <br><br>
+<div class="row">
+
+    <div class="col-md-5" style="padding: 15px">
+        <h3>Task Comments: <i>(most recent first)</i> </h3>
+        <br>
+        <?php
+            if(count($comments) == 0){
+                echo "<i>No comments have been posted!<br></i>";
+                Modal::begin([
+//                    'header' => '<h2>Hello world</h2>',
+                    'toggleButton' => ['label' => 'Post the first Comment'],
+                ]);
+                include("_add_comment.php");
+                Modal::end();
+            }else{
+                foreach($comments as $comment){
+                ?>
+        <div class="row" style="border: 1px inset #e3e3e3; border-radius: 15px; padding: 15px">
+            <i>Posted by <?=User::getUsername($comment->created_by)?> - <?=date('F j, Y, g:i a',$comment->created_on)?></i>
+            <i><?=$comment->comment?></i>
+        </div>
+                    <br>
+        <?php
+                }
+                Modal::begin([
+//                    'header' => '<h2>Hello world</h2>',
+                    'toggleButton' => ['label' => 'Post a Comment'],
+                ]);
+                include("_add_comment.php");
+                Modal::end();
+            }
+        ?>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5" style="padding: 15px">
+        <h3>Task Files: </h3>
+    </div>
+
+</div>
