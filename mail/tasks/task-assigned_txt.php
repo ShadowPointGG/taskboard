@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 
-$link = Url::to(['/task', 'id' => $task->id],'http');
+$link = Url::to(['/task/view', 'id' => $task->id],'http');
 ?>
 
 <?=APPLICATION_NAME?>
