@@ -120,9 +120,14 @@ Class TaskController extends Controller{
         $taskModel = Tasks::find()->where(['id'=>$id])->one();
         $taskModel->delete();
 
-        $taskAssignments = Tasks::find()->where(['task_id' => $id])->all();
+        $taskAssignments = TaskAssignments::find()->where(['task_id' => $id])->all();
         foreach($taskAssignments as $assignment){
             $assignment->delete();
+        }
+
+        $taskComments = TaskComments::find()->where(['task_id'=>$id])->all();
+        foreach($taskComments as $comment){
+            $comment->delete();
         }
 
         return $this->redirect(['/admin/task-dashboard']);

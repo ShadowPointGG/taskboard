@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 
-$link = Url::to(['/site/verify-email', 'token' => $user->verification_token],'http');
+$link = Url::to(['/task', 'id' => $task->id],'http');
 ?>
 
 <?=APPLICATION_NAME?>
