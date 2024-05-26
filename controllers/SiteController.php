@@ -110,6 +110,8 @@ class SiteController extends Controller
         }
 
         $model->password = '';
+
+        $this->layout = "main_no-nav";
         return $this->render('login', [
             'model' => $model,
         ]);

@@ -9,99 +9,51 @@ class m230808_155811_authInit extends Migration
 {
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
     public function safeUp()
     {
         $auth = Yii::$app->authManager;
 
         /**
-         * User Management Roles
+         * Team Member Role
          */
 
-        //userManager - createUsers
-        $userCreate = $auth->createPermission("userCreate");
-        $userCreate->description = "Can create Users";
-        $auth->add($userCreate);
-
-        //userManager - editUsers
-        $userEdit = $auth->createPermission("userEdit");
-        $userEdit->description = "Can edit Users";
-        $auth->add($userEdit);
-
-        //userManager - disableUsers
-        $userDisable = $auth->createPermission("userDisable");
-        $userDisable->description = "Can disable Users";
-        $auth->add($userDisable);
-
-        //userManager - userAdmin
-        $userAdmin = $auth->createRole("userAdmin");
-        $userAdmin->description = "User Administration";
-        $auth->add($userAdmin);
-        $auth->addChild($userAdmin, $userCreate);
-        $auth->addChild($userAdmin, $userEdit);
-        $auth->addChild($userAdmin, $userDisable);
+        $teamMember = $auth->createRole('teamMember');
+        $teamMember->name = "Team Member";
+        $auth->add($teamMember);
 
         /**
-         * Task Management Roles
+         * EBoard Role
          */
 
-        //taskManager - createTasks
-        $taskCreate = $auth->createPermission("taskCreate");
-        $taskCreate->description = "Can create Tasks";
-        $auth->add($taskCreate);
-
-        //taskManager - updateTasks
-        $taskUpdate = $auth->createPermission("taskUpdate");
-        $taskUpdate->description = "Can update Tasks";
-        $auth->add($taskUpdate);
-
-        //taskManager - deleteTasks
-        $taskDelete = $auth->createPermission("taskDelete");
-        $taskDelete->description = "Can delete Tasks";
-        $auth->add($taskDelete);
-
-        //taskManager - taskAdmin
-        $taskAdmin = $auth->createRole("taskAdmin");
-        $taskAdmin->description = "Task Administrator";
-        $auth->add($taskAdmin);
-        $auth->addChild($taskAdmin, $taskCreate);
-        $auth->addChild($taskAdmin, $taskUpdate);
-        $auth->addChild($taskAdmin, $taskDelete);
+        $eBoard = $auth->createRole('eboard');
+        $eBoard->name ='SPGG EBoard Member';
+        $auth->add($eBoard);
 
         /**
-         * System Management Roles
+         * Admin Role - Fusco Role with access to all systems. eBoard won't have full access to some features, like approving financial requests
          */
 
-        //siteAdmin - manage Site Configs
-        $siteConfigs = $auth->createPermission("siteConfig");
-        $siteConfigs->description = "Can edit Site Configurations";
-        $auth->add($siteConfigs);
-
-        $siteAdmin = $auth->createRole("siteAdmin");
-        $siteAdmin->description = "Site Administrator";
-        $auth->add($siteAdmin);
-        $auth->addChild($siteAdmin, $siteConfigs);
-
-        //globalAdmin
-        $globalAdmin = $auth->createRole("globalAdmin");
-        $globalAdmin->description = "Global Administrator";
-        $auth->add($globalAdmin);
-        $auth->addChild($globalAdmin, $taskAdmin);
-        $auth->addChild($globalAdmin, $userAdmin);
-        $auth->addChild($globalAdmin, $siteAdmin);
-
-        //administrator
-        $administrator = $auth->createRole("admin");
-        $administrator->description = "General Administrator";
-        $auth->add($administrator);
-        $auth->addChild($administrator, $taskAdmin);
-        $auth->addChild($administrator, $userAdmin);
+        $admin = $auth->createRole('admin');
+        $admin->name="Administrator";
+        $auth->add($admin);
+        $auth->addChild($admin, $eBoard);
 
         /**
-         * Add Global Admin roles to User ID 1
+         * System Admin - Full system access. Includes Site Error Logs and analytics - Jons Role
          */
 
-        $auth->assign($globalAdmin, 1);
+        $sudo = $auth->createRole('sudo');
+        $sudo->name="System Administrator";
+        $auth->add($sudo);
+        $auth->addChild($sudo, $admin);
+
+        /**
+         * Add System Admin roles to User ID 1
+         */
+
+        $auth->assign($sudo, 1);
     }
 
     /**

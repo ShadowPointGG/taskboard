@@ -35,4 +35,5 @@ tests/_support/_generated
 #vagrant folder
 /.vagrant
 
+config/vars.php_Prod
 config/vars.php

@@ -97,3 +97,7 @@ div>info-box{
     border: black inset 15px;
     padding: 10px;
 }
+
+.login-layout{
+    background-color: #000000;
+}

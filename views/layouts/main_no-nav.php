@@ -22,17 +22,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 if(!Yii::$app->user->isGuest){
     Tasks::updateAllStatus();
 }
+
+$this->title = "Login - ShadowPoint GG"
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
-    <title><?= Html::encode(APPLICATION_NAME) ?></title>
+    <title><?= Html::encode($this->title) ?></title>
     <!-- on your view layout file HEAD section -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - ShadowPointGG</title>
     <meta name="theme-color" content="#919191">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="manifest" href="manifest.json">
@@ -42,18 +43,10 @@ if(!Yii::$app->user->isGuest){
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <?php $this->head() ?>
 </head>
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100 login-layout">
 <?php $this->beginBody() ?>
-
-<header id="header">
-<?= include("navigation.php")?>
-</header>
-
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
-        <?php if (!empty($this->params['breadcrumbs'])): ?>
-            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-        <?php endif ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
